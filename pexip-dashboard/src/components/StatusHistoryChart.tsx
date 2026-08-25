@@ -82,7 +82,7 @@ export default function StatusHistoryChart({
 
   return (
     <div
-      className='rounded-xl overflow-hidden mb-8'
+      className='rounded-xl overflow-hidden h-full'
       style={{
         background: colors.bgSurface,
         border: `1px solid ${colors.border}`,

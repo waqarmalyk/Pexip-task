@@ -50,13 +50,15 @@ export default function App() {
           </div>
         )}
 
-        <SummaryCards
-          summary={summary}
-          activeStatus={filterStatus}
-          onFilterStatus={(s) => setFilterStatus(s as StatusFilter)}
-        />
+        <div className='grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6 mb-8'>
+          <SummaryCards
+            summary={summary}
+            activeStatus={filterStatus}
+            onFilterStatus={(s) => setFilterStatus(s as StatusFilter)}
+          />
 
-        <StatusHistoryChart history={history} />
+          <StatusHistoryChart history={history} />
+        </div>
 
         <DeviceList
           key={filterStatus}

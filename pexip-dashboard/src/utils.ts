@@ -42,6 +42,16 @@ export const STATUSES: DeviceStatus[] = [
   'deactivated',
 ];
 
+// ── Status icons ──
+
+export const STATUS_ICONS: Record<string, string> = {
+  total: '📊',
+  online: '🟢',
+  inMeeting: '🎥',
+  offline: '🔴',
+  deactivated: '⚫',
+};
+
 // ── Summary cards ──
 
 export const CARDS = [
