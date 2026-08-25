@@ -59,8 +59,8 @@ export default function App() {
         <StatusHistoryChart history={history} />
 
         <DeviceList
+          key={filterStatus}
           devices={visibleDevices}
-          filterStatus=''
           onRemove={removeDevice}
           onOpenAdd={() => setShowAddModal(true)}
         />

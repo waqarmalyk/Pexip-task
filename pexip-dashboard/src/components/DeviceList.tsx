@@ -1,79 +1,35 @@
 import { useState } from 'react';
-import {
-  Trash2,
-  Search,
-  PlusCircle,
-  ChevronUp,
-  ChevronDown,
-  ChevronsUpDown,
-} from 'lucide-react';
+import { Trash2, PlusCircle, Search } from 'lucide-react';
 import type { Device } from '../types';
 import StatusBadge from './StatusBadge';
 import { colors } from '../theme';
 
 interface DeviceListProps {
   devices: Device[];
-  filterStatus: string;
   onRemove: (id: string) => void;
   onOpenAdd: () => void;
 }
 
-type SortKey = 'name' | 'model' | 'status' | 'id';
-
 export default function DeviceList({
   devices,
-  filterStatus,
   onRemove,
   onOpenAdd,
 }: DeviceListProps) {
   const [search, setSearch] = useState('');
-  const [sortKey, setSortKey] = useState<SortKey>('id');
-  const [sortAsc, setSortAsc] = useState(true);
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 20;
 
-  const handleSort = (key: SortKey) => {
-    if (key === sortKey) setSortAsc((a) => !a);
-    else {
-      setSortKey(key);
-      setSortAsc(true);
-    }
-    setPage(1);
-  };
-
-  const filtered = devices
-    .filter((d) => {
-      if (filterStatus && d.status !== filterStatus) return false;
-      if (
-        search &&
-        !`${d.name} ${d.model} ${d.id}`
-          .toLowerCase()
-          .includes(search.toLowerCase())
-      )
-        return false;
-      return true;
-    })
-    .sort((a, b) => {
-      const av = a[sortKey],
-        bv = b[sortKey];
-      if (av < bv) return sortAsc ? -1 : 1;
-      if (av > bv) return sortAsc ? 1 : -1;
-      return 0;
-    });
+  const filtered = search.trim()
+    ? devices.filter((d) => d.name.toLowerCase().includes(search.toLowerCase()))
+    : devices;
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  const SortIcon = ({ col }: { col: SortKey }) =>
-    sortKey === col ? (
-      sortAsc ? (
-        <ChevronUp size={13} style={{ color: colors.accent }} />
-      ) : (
-        <ChevronDown size={13} style={{ color: colors.accent }} />
-      )
-    ) : (
-      <ChevronsUpDown size={13} style={{ color: colors.textMuted }} />
-    );
+  // Always clamp to a valid page so stale page state never shows too few / zero rows
+  const currentPage = Math.min(Math.max(1, page), Math.max(1, totalPages));
+  const paged = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
 
   return (
     <div
@@ -95,7 +51,9 @@ export default function DeviceList({
             All Devices
           </h2>
           <p className='text-xs mt-0.5' style={{ color: colors.textMuted }}>
-            {filtered.length} of {devices.length} devices
+            {search.trim()
+              ? `${filtered.length} of ${devices.length} devices`
+              : `${devices.length} devices`}
           </p>
         </div>
         <button
@@ -133,7 +91,7 @@ export default function DeviceList({
               setSearch(e.target.value);
               setPage(1);
             }}
-            placeholder='Search by name, model or ID…'
+            placeholder='Filter by device name…'
             className='w-full rounded-lg pl-8 pr-4 py-2 text-xs outline-none'
             style={{
               background: colors.bgElevated,
@@ -151,24 +109,10 @@ export default function DeviceList({
               className='text-xs font-semibold uppercase tracking-wide'
               style={{ background: colors.bgElevated, color: colors.textMuted }}
             >
-              {(
-                [
-                  { key: 'id', label: 'ID' },
-                  { key: 'name', label: 'Name' },
-                  { key: 'model', label: 'Model' },
-                  { key: 'status', label: 'Status' },
-                ] as { key: SortKey; label: string }[]
-              ).map((col) => (
-                <th
-                  key={col.key}
-                  onClick={() => handleSort(col.key)}
-                  className='text-left px-4 py-3 cursor-pointer select-none whitespace-nowrap hover:opacity-80'
-                >
-                  <span className='flex items-center gap-1'>
-                    {col.label} <SortIcon col={col.key} />
-                  </span>
-                </th>
-              ))}
+              <th className='text-left px-4 py-3 whitespace-nowrap'>ID</th>
+              <th className='text-left px-4 py-3 whitespace-nowrap'>Name</th>
+              <th className='text-left px-4 py-3 whitespace-nowrap'>Model</th>
+              <th className='text-left px-4 py-3 whitespace-nowrap'>Status</th>
               <th className='text-left px-4 py-3'>Description</th>
               <th className='px-4 py-3' />
             </tr>
@@ -266,13 +210,14 @@ export default function DeviceList({
           }}
         >
           <span>
-            Showing {(page - 1) * PAGE_SIZE + 1}–
-            {Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
+            Showing {(currentPage - 1) * PAGE_SIZE + 1}–
+            {Math.min(currentPage * PAGE_SIZE, filtered.length)} of{' '}
+            {filtered.length}
           </span>
           <div className='flex gap-1.5'>
             <button
-              disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
+              disabled={currentPage === 1}
+              onClick={() => setPage(currentPage - 1)}
               className='px-3 py-1.5 rounded-md disabled:opacity-30 transition-colors'
               style={{
                 background: colors.bgElevated,
@@ -285,16 +230,16 @@ export default function DeviceList({
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
               let p: number;
               if (totalPages <= 7) p = i + 1;
-              else if (page <= 4) p = i + 1;
-              else if (page >= totalPages - 3) p = totalPages - 6 + i;
-              else p = page - 3 + i;
+              else if (currentPage <= 4) p = i + 1;
+              else if (currentPage >= totalPages - 3) p = totalPages - 6 + i;
+              else p = currentPage - 3 + i;
               return (
                 <button
                   key={p}
                   onClick={() => setPage(p)}
                   className='px-3 py-1.5 rounded-md border transition-colors'
                   style={
-                    p === page
+                    p === currentPage
                       ? {
                           background: colors.accent,
                           borderColor: colors.accent,
@@ -312,8 +257,8 @@ export default function DeviceList({
               );
             })}
             <button
-              disabled={page === totalPages}
-              onClick={() => setPage((p) => p + 1)}
+              disabled={currentPage === totalPages}
+              onClick={() => setPage(currentPage + 1)}
               className='px-3 py-1.5 rounded-md disabled:opacity-30 transition-colors'
               style={{
                 background: colors.bgElevated,
