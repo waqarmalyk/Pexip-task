@@ -1,0 +1,70 @@
+import { useMemo, useState } from 'react';
+import './App.css';
+import type { DeviceStatus } from './types';
+import { useDevices } from './hooks';
+import SummaryCards from './components/SummaryCards';
+import StatusHistoryChart from './components/StatusHistoryChart';
+import DeviceList from './components/DeviceList';
+import AddDeviceModal from './components/AddDeviceModal';
+
+type StatusFilter = DeviceStatus | '';
+
+export default function App() {
+  const { devices, history, summary, loading, error, addDevice, removeDevice } =
+    useDevices();
+
+  const [filterStatus, setFilterStatus] = useState<StatusFilter>('');
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const visibleDevices = useMemo(() => {
+    if (!filterStatus) return devices;
+    return devices.filter((d) => d.status === filterStatus);
+  }, [devices, filterStatus]);
+
+  return (
+    <div className='min-h-screen bg-[#0d1117] text-[#e6edf3]'>
+      <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10'>
+        <header className='mb-8'>
+          <h1 className='text-2xl sm:text-3xl font-bold tracking-tight'>
+            Pexip Device Dashboard
+          </h1>
+          <p className='text-sm text-[#7d8590] mt-2'>
+            Track room system status, trends, and inventory health.
+          </p>
+        </header>
+
+        {error && (
+          <div className='mb-6 rounded-lg border border-[#f85149] bg-[rgba(248,81,73,.10)] px-4 py-3 text-sm text-[#ffb3ad]'>
+            {error}
+          </div>
+        )}
+
+        <SummaryCards
+          summary={summary}
+          activeStatus={filterStatus}
+          onFilterStatus={(s) => setFilterStatus(s as StatusFilter)}
+        />
+
+        <StatusHistoryChart history={history} />
+
+        <DeviceList
+          devices={visibleDevices}
+          filterStatus=''
+          onRemove={removeDevice}
+          onOpenAdd={() => setShowAddModal(true)}
+        />
+
+        {loading && (
+          <p className='text-xs text-[#7d8590] mt-4'>Loading data…</p>
+        )}
+      </main>
+
+      {showAddModal && (
+        <AddDeviceModal
+          onAdd={addDevice}
+          onClose={() => setShowAddModal(false)}
+        />
+      )}
+    </div>
+  );
+}
