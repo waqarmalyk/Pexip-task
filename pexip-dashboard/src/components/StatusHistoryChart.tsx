@@ -16,6 +16,7 @@ import { colors } from '../theme';
 
 interface StatusHistoryChartProps {
   history: HistoryEntry[];
+  total: number;
 }
 
 interface TooltipPayloadItem {
@@ -67,6 +68,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
 
 export default function StatusHistoryChart({
   history,
+  total,
 }: StatusHistoryChartProps) {
   const [range, setRange] = useState<RangeFilter>('all');
 
@@ -147,6 +149,7 @@ export default function StatusHistoryChart({
               axisLine={false}
               tickLine={false}
               width={36}
+              domain={[0, total > 0 ? total : 'auto']}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend

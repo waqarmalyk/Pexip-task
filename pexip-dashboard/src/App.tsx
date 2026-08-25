@@ -57,7 +57,7 @@ export default function App() {
             onFilterStatus={(s) => setFilterStatus(s as StatusFilter)}
           />
 
-          <StatusHistoryChart history={history} />
+          <StatusHistoryChart history={history} total={summary.total} />
         </div>
 
         <DeviceList
