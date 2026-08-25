@@ -1,5 +1,6 @@
 import type { Summary } from '../types';
 import { CARDS } from '../utils';
+import { colors } from '../theme';
 
 interface SummaryCardsProps {
   summary: Summary;
@@ -30,13 +31,19 @@ export default function SummaryCards({
             key={key}
             onClick={() => onFilterStatus(key === 'total' ? '' : key)}
             style={{
-              borderColor: isActive ? accentColor : '#30363d',
               borderTopColor: accentColor,
+              borderRightColor: isActive ? accentColor : colors.border,
+              borderBottomColor: isActive ? accentColor : colors.border,
+              borderLeftColor: isActive ? accentColor : colors.border,
               borderTopWidth: 3,
+              background: colors.bgSurface,
             }}
-            className='relative flex flex-col gap-2 text-left px-5 py-5 rounded-xl border bg-[#161b22] hover:-translate-y-0.5 transition-transform cursor-pointer'
+            className='relative flex flex-col gap-2 text-left px-5 py-5 rounded-xl border hover:-translate-y-0.5 transition-transform cursor-pointer'
           >
-            <span className='text-xs font-semibold uppercase tracking-wide text-[#7d8590]'>
+            <span
+              className='text-xs font-semibold uppercase tracking-wide'
+              style={{ color: colors.textMuted }}
+            >
               {label}
             </span>
             <span
@@ -46,10 +53,14 @@ export default function SummaryCards({
               {value}
             </span>
             {pct && (
-              <span className='text-xs text-[#7d8590]'>{pct} of total</span>
+              <span className='text-xs' style={{ color: colors.textMuted }}>
+                {pct} of total
+              </span>
             )}
             {key === 'total' && (
-              <span className='text-xs text-[#7d8590]'>All registered</span>
+              <span className='text-xs' style={{ color: colors.textMuted }}>
+                All registered
+              </span>
             )}
           </button>
         );

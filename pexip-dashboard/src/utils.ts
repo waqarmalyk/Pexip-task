@@ -1,4 +1,5 @@
 import type { DeviceStatus } from './types';
+import { colors } from './theme';
 
 // ── Status metadata
 
@@ -8,27 +9,27 @@ export const STATUS_META: Record<
 > = {
   online: {
     label: 'Online',
-    color: '#3fb950',
-    bg: 'rgba(63,185,80,.12)',
-    dot: '#3fb950',
+    color: colors.online,
+    bg: colors.onlineBg,
+    dot: colors.online,
   },
   inMeeting: {
     label: 'In Meeting',
-    color: '#d29922',
-    bg: 'rgba(210,153,34,.12)',
-    dot: '#d29922',
+    color: colors.inMeeting,
+    bg: colors.inMeetingBg,
+    dot: colors.inMeeting,
   },
   offline: {
     label: 'Offline',
-    color: '#f85149',
-    bg: 'rgba(248,81,73,.12)',
-    dot: '#f85149',
+    color: colors.offline,
+    bg: colors.offlineBg,
+    dot: colors.offline,
   },
   deactivated: {
     label: 'Deactivated',
-    color: '#6e7681',
-    bg: 'rgba(110,118,129,.12)',
-    dot: '#6e7681',
+    color: colors.deactivated,
+    bg: colors.deactivatedBg,
+    dot: colors.deactivated,
   },
 };
 
@@ -44,20 +45,20 @@ export const STATUSES: DeviceStatus[] = [
 // ── Summary cards ──
 
 export const CARDS = [
-  { key: 'total', label: 'Total Devices', accentColor: '#2ea8e0' },
-  { key: 'online', label: 'Online', accentColor: '#3fb950' },
-  { key: 'inMeeting', label: 'In Meeting', accentColor: '#d29922' },
-  { key: 'offline', label: 'Offline', accentColor: '#f85149' },
-  { key: 'deactivated', label: 'Deactivated', accentColor: '#6e7681' },
+  { key: 'total', label: 'Total Devices', accentColor: colors.accent },
+  { key: 'online', label: 'Online', accentColor: colors.online },
+  { key: 'inMeeting', label: 'In Meeting', accentColor: colors.inMeeting },
+  { key: 'offline', label: 'Offline', accentColor: colors.offline },
+  { key: 'deactivated', label: 'Deactivated', accentColor: colors.deactivated },
 ] as const;
 
 // ── Chart lines ────
 
 export const LINES = [
-  { key: 'online', label: 'Online', color: '#3fb950' },
-  { key: 'inMeeting', label: 'In Meeting', color: '#d29922' },
-  { key: 'offline', label: 'Offline', color: '#f85149' },
-  { key: 'deactivated', label: 'Deactivated', color: '#6e7681' },
+  { key: 'online', label: 'Online', color: colors.online },
+  { key: 'inMeeting', label: 'In Meeting', color: colors.inMeeting },
+  { key: 'offline', label: 'Offline', color: colors.offline },
+  { key: 'deactivated', label: 'Deactivated', color: colors.deactivated },
 ] as const;
 
 // ── Chart range options & meta

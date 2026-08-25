@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import type { AddDeviceFormData } from '../types';
 import { STATUS_META, STATUSES } from '../utils';
+import { colors } from '../theme';
 
 interface AddDeviceModalProps {
   onAdd: (data: AddDeviceFormData) => void;
@@ -38,19 +39,44 @@ export default function AddDeviceModal({
   return (
     <div
       className='fixed inset-0 z-50 flex items-center justify-center p-4'
-      style={{ background: 'rgba(0,0,0,0.7)' }}
+      style={{ background: colors.overlay }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className='bg-[#161b22] border border-[#30363d] rounded-xl w-full max-w-md shadow-2xl'>
-        <div className='flex items-center justify-between px-6 py-4 border-b border-[#30363d]'>
-          <h3 className='text-sm font-semibold text-[#e6edf3]'>
+      <div
+        className='rounded-xl w-full max-w-md shadow-2xl'
+        style={{
+          background: colors.bgSurface,
+          border: `1px solid ${colors.border}`,
+        }}
+      >
+        <div
+          className='flex items-center justify-between px-6 py-4'
+          style={{ borderBottom: `1px solid ${colors.border}` }}
+        >
+          <h3
+            className='text-sm font-semibold'
+            style={{ color: colors.textPrimary }}
+          >
             Add New Device
           </h3>
           <button
             onClick={onClose}
-            className='p-1 rounded-md text-[#7d8590] hover:text-[#e6edf3] hover:bg-[#1c2128] transition-colors'
+            className='p-1 rounded-md transition-colors'
+            style={{ color: colors.textMuted }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.color =
+                colors.textPrimary;
+              (e.currentTarget as HTMLButtonElement).style.background =
+                colors.bgElevated;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.color =
+                colors.textMuted;
+              (e.currentTarget as HTMLButtonElement).style.background =
+                'transparent';
+            }}
           >
             <X size={16} />
           </button>
@@ -58,29 +84,36 @@ export default function AddDeviceModal({
 
         <form onSubmit={handleSubmit} className='px-6 py-5 flex flex-col gap-5'>
           <div className='flex flex-col gap-1.5'>
-            <label className='text-xs font-semibold text-[#7d8590] uppercase tracking-wide'>
-              Name <span className='text-[#f85149]'>*</span>
+            <label
+              className='text-xs font-semibold uppercase tracking-wide'
+              style={{ color: colors.textMuted }}
+            >
+              Name <span style={{ color: colors.offline }}>*</span>
             </label>
             <input
               type='text'
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder='e.g. London - Boardroom 1'
-              className={`bg-[#1c2128] border rounded-lg px-3 py-2.5 text-sm text-[#e6edf3] placeholder-[#7d8590] outline-none transition-colors ${
-                errors.name
-                  ? 'border-[#f85149]'
-                  : 'border-[#30363d] focus:border-[#2ea8e0]'
-              }`}
+              className='rounded-lg px-3 py-2.5 text-sm outline-none transition-colors'
+              style={{
+                background: colors.bgElevated,
+                border: `1px solid ${errors.name ? colors.offline : colors.border}`,
+                color: colors.textPrimary,
+              }}
             />
             {errors.name && (
-              <span className='text-xs text-[#f85149]'>{errors.name}</span>
+              <span className='text-xs' style={{ color: colors.offline }}>
+                {errors.name}
+              </span>
             )}
           </div>
 
           <div className='flex flex-col gap-1.5'>
-            <label className='text-xs font-semibold text-[#7d8590] uppercase tracking-wide'>
-              Description
-            </label>
+            <label
+              className='text-xs font-semibold uppercase tracking-wide'
+              style={{ color: colors.textMuted }}
+            ></label>
             <textarea
               value={form.description}
               onChange={(e) =>
@@ -88,14 +121,20 @@ export default function AddDeviceModal({
               }
               placeholder='Optional description…'
               rows={3}
-              className='bg-[#1c2128] border border-[#30363d] focus:border-[#2ea8e0] rounded-lg px-3 py-2.5 text-sm text-[#e6edf3] placeholder-[#7d8590] outline-none resize-none transition-colors'
+              className='rounded-lg px-3 py-2.5 text-sm outline-none resize-none transition-colors'
+              style={{
+                background: colors.bgElevated,
+                border: `1px solid ${colors.border}`,
+                color: colors.textPrimary,
+              }}
             />
           </div>
 
           <div className='flex flex-col gap-2'>
-            <label className='text-xs font-semibold text-[#7d8590] uppercase tracking-wide'>
-              Status
-            </label>
+            <label
+              className='text-xs font-semibold uppercase tracking-wide'
+              style={{ color: colors.textMuted }}
+            ></label>
             <div className='grid grid-cols-2 gap-2'>
               {STATUSES.map((s) => {
                 const meta = STATUS_META[s];
@@ -106,8 +145,8 @@ export default function AddDeviceModal({
                     type='button'
                     onClick={() => setForm((f) => ({ ...f, status: s }))}
                     style={{
-                      borderColor: active ? meta.color : '#30363d',
-                      background: active ? meta.bg : '#1c2128',
+                      borderColor: active ? meta.color : colors.border,
+                      background: active ? meta.bg : colors.bgElevated,
                     }}
                     className='flex items-center gap-2 px-3 py-2.5 rounded-lg border text-xs font-medium transition-all'
                   >
@@ -115,7 +154,9 @@ export default function AddDeviceModal({
                       className='w-2 h-2 rounded-full'
                       style={{ background: meta.dot }}
                     />
-                    <span style={{ color: active ? meta.color : '#7d8590' }}>
+                    <span
+                      style={{ color: active ? meta.color : colors.textMuted }}
+                    >
                       {meta.label}
                     </span>
                   </button>
@@ -128,13 +169,26 @@ export default function AddDeviceModal({
             <button
               type='button'
               onClick={onClose}
-              className='flex-1 px-4 py-2.5 rounded-lg border border-[#30363d] text-sm text-[#7d8590] hover:text-[#e6edf3] hover:border-[#7d8590] transition-colors'
+              className='flex-1 px-4 py-2.5 rounded-lg text-sm transition-colors'
+              style={{
+                border: `1px solid ${colors.border}`,
+                color: colors.textMuted,
+              }}
             >
               Cancel
             </button>
             <button
               type='submit'
-              className='flex-1 px-4 py-2.5 rounded-lg bg-[#2ea8e0] hover:bg-[#1b8fc4] text-white text-sm font-semibold transition-colors'
+              className='flex-1 px-4 py-2.5 rounded-lg text-white text-sm font-semibold transition-colors'
+              style={{ background: colors.accent }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  colors.accentHover;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  colors.accent;
+              }}
             >
               Save Device
             </button>

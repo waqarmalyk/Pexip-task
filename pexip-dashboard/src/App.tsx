@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import './App.css';
 import type { DeviceStatus } from './types';
+import { colors } from './theme';
 import { useDevices } from './hooks';
 import SummaryCards from './components/SummaryCards';
 import StatusHistoryChart from './components/StatusHistoryChart';
@@ -22,19 +23,29 @@ export default function App() {
   }, [devices, filterStatus]);
 
   return (
-    <div className='min-h-screen bg-[#0d1117] text-[#e6edf3]'>
+    <div
+      className='min-h-screen'
+      style={{ background: colors.bgBase, color: colors.textPrimary }}
+    >
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10'>
         <header className='mb-8'>
           <h1 className='text-2xl sm:text-3xl font-bold tracking-tight'>
             Pexip Device Dashboard
           </h1>
-          <p className='text-sm text-[#7d8590] mt-2'>
+          <p className='text-sm mt-2' style={{ color: colors.textMuted }}>
             Track room system status, trends, and inventory health.
           </p>
         </header>
 
         {error && (
-          <div className='mb-6 rounded-lg border border-[#f85149] bg-[rgba(248,81,73,.10)] px-4 py-3 text-sm text-[#ffb3ad]'>
+          <div
+            className='mb-6 rounded-lg px-4 py-3 text-sm'
+            style={{
+              border: `1px solid ${colors.offline}`,
+              background: colors.offlineBgFaint,
+              color: colors.offlineLight,
+            }}
+          >
             {error}
           </div>
         )}
@@ -55,7 +66,9 @@ export default function App() {
         />
 
         {loading && (
-          <p className='text-xs text-[#7d8590] mt-4'>Loading data…</p>
+          <p className='text-xs mt-4' style={{ color: colors.textMuted }}>
+            Loading data…
+          </p>
         )}
       </main>
 

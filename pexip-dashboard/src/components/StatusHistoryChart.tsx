@@ -12,6 +12,7 @@ import {
 import type { HistoryEntry } from '../types';
 import { LINES, RANGE_META, RANGE_OPTIONS } from '../utils';
 import type { RangeFilter } from '../utils';
+import { colors } from '../theme';
 
 interface StatusHistoryChartProps {
   history: HistoryEntry[];
@@ -33,8 +34,16 @@ interface TooltipProps {
 const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className='bg-[#1c2128] border border-[#30363d] rounded-lg p-3 text-xs shadow-xl'>
-      <p className='font-semibold text-[#e6edf3] mb-2'>{label}</p>
+    <div
+      className='rounded-lg p-3 text-xs shadow-xl'
+      style={{
+        background: colors.bgElevated,
+        border: `1px solid ${colors.border}`,
+      }}
+    >
+      <p className='font-semibold mb-2' style={{ color: colors.textPrimary }}>
+        {label}
+      </p>
       {payload.map((p) => (
         <div
           key={p.dataKey}
@@ -45,7 +54,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
               className='w-2 h-2 rounded-full'
               style={{ background: p.color }}
             />
-            <span className='text-[#7d8590]'>{p.name}</span>
+            <span style={{ color: colors.textMuted }}>{p.name}</span>
           </span>
           <span className='font-semibold' style={{ color: p.color }}>
             {p.value}
@@ -72,24 +81,47 @@ export default function StatusHistoryChart({
     idx % meta.tickEvery === 0 ? val : '';
 
   return (
-    <div className='bg-[#161b22] border border-[#30363d] rounded-xl overflow-hidden mb-8'>
-      <div className='px-5 py-4 border-b border-[#30363d] flex items-start justify-between gap-4 flex-wrap'>
+    <div
+      className='rounded-xl overflow-hidden mb-8'
+      style={{
+        background: colors.bgSurface,
+        border: `1px solid ${colors.border}`,
+      }}
+    >
+      <div
+        className='px-5 py-4 flex items-start justify-between gap-4 flex-wrap'
+        style={{ borderBottom: `1px solid ${colors.border}` }}
+      >
         <div>
-          <h2 className='text-sm font-semibold text-[#e6edf3]'>
+          <h2
+            className='text-sm font-semibold'
+            style={{ color: colors.textPrimary }}
+          >
             Device Status Over Time
           </h2>
-          <p className='text-xs text-[#7d8590] mt-0.5'>{meta.subtitle}</p>
+          <p className='text-xs mt-0.5' style={{ color: colors.textMuted }}>
+            {meta.subtitle}
+          </p>
         </div>
-        <div className='flex items-center gap-1 bg-[#1c2128] border border-[#30363d] rounded-lg p-1'>
+        <div
+          className='flex items-center gap-1 rounded-lg p-1'
+          style={{
+            background: colors.bgElevated,
+            border: `1px solid ${colors.border}`,
+          }}
+        >
           {RANGE_OPTIONS.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setRange(key)}
               className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                range === key
-                  ? 'bg-[#2ea8e0] text-white shadow'
-                  : 'text-[#7d8590] hover:text-[#e6edf3]'
+                range === key ? 'text-white shadow' : ''
               }`}
+              style={
+                range === key
+                  ? { background: colors.accent }
+                  : { color: colors.textMuted }
+              }
             >
               {label}
             </button>
@@ -102,23 +134,27 @@ export default function StatusHistoryChart({
             data={filteredHistory}
             margin={{ top: 4, right: 16, left: 0, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray='3 3' stroke='#21262d' />
+            <CartesianGrid strokeDasharray='3 3' stroke={colors.bgSubtle} />
             <XAxis
               dataKey='period'
-              tick={{ fill: '#7d8590', fontSize: 11 }}
+              tick={{ fill: colors.textMuted, fontSize: 11 }}
               tickFormatter={tickFormatter}
-              axisLine={{ stroke: '#30363d' }}
+              axisLine={{ stroke: colors.border }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: '#7d8590', fontSize: 11 }}
+              tick={{ fill: colors.textMuted, fontSize: 11 }}
               axisLine={false}
               tickLine={false}
               width={36}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend
-              wrapperStyle={{ fontSize: 12, color: '#7d8590', paddingTop: 8 }}
+              wrapperStyle={{
+                fontSize: 12,
+                color: colors.textMuted,
+                paddingTop: 8,
+              }}
               iconType='circle'
               iconSize={8}
             />
