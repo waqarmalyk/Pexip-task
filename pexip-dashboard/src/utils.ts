@@ -1,6 +1,6 @@
 import type { DeviceStatus } from './types';
 
-// ── Status metadata ────────────────────────────────────────────────────────────
+// ── Status metadata
 
 export const STATUS_META: Record<
   DeviceStatus,
@@ -32,7 +32,7 @@ export const STATUS_META: Record<
   },
 };
 
-// ── Device statuses list ───────────────────────────────────────────────────────
+// ── Device statuses list
 
 export const STATUSES: DeviceStatus[] = [
   'online',
@@ -41,7 +41,7 @@ export const STATUSES: DeviceStatus[] = [
   'deactivated',
 ];
 
-// ── Summary cards ──────────────────────────────────────────────────────────────
+// ── Summary cards ──
 
 export const CARDS = [
   { key: 'total', label: 'Total Devices', accentColor: '#2ea8e0' },
@@ -51,7 +51,7 @@ export const CARDS = [
   { key: 'deactivated', label: 'Deactivated', accentColor: '#6e7681' },
 ] as const;
 
-// ── Chart lines ────────────────────────────────────────────────────────────────
+// ── Chart lines ────
 
 export const LINES = [
   { key: 'online', label: 'Online', color: '#3fb950' },
@@ -60,7 +60,7 @@ export const LINES = [
   { key: 'deactivated', label: 'Deactivated', color: '#6e7681' },
 ] as const;
 
-// ── Chart range options & meta ─────────────────────────────────────────────────
+// ── Chart range options & meta
 
 export type RangeFilter = 'daily' | 'monthly' | 'all';
 
