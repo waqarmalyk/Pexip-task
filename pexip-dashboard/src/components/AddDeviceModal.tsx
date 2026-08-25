@@ -1,19 +1,12 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import type { AddDeviceFormData, DeviceStatus } from '../types';
-import { STATUS_META } from '../hooks';
+import type { AddDeviceFormData } from '../types';
+import { STATUS_META, STATUSES } from '../utils';
 
 interface AddDeviceModalProps {
   onAdd: (data: AddDeviceFormData) => void;
   onClose: () => void;
 }
-
-const STATUSES: DeviceStatus[] = [
-  'online',
-  'inMeeting',
-  'offline',
-  'deactivated',
-];
 
 export default function AddDeviceModal({
   onAdd,

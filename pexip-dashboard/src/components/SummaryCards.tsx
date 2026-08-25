@@ -1,18 +1,11 @@
 import type { Summary } from '../types';
+import { CARDS } from '../utils';
 
 interface SummaryCardsProps {
   summary: Summary;
   activeStatus: string;
   onFilterStatus: (s: string) => void;
 }
-
-const CARDS = [
-  { key: 'total', label: 'Total Devices', accentColor: '#2ea8e0' },
-  { key: 'online', label: 'Online', accentColor: '#3fb950' },
-  { key: 'inMeeting', label: 'In Meeting', accentColor: '#d29922' },
-  { key: 'offline', label: 'Offline', accentColor: '#f85149' },
-  { key: 'deactivated', label: 'Deactivated', accentColor: '#6e7681' },
-] as const;
 
 export default function SummaryCards({
   summary,

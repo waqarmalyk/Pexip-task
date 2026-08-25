@@ -10,17 +10,12 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { HistoryEntry } from '../types';
+import { LINES, RANGE_META, RANGE_OPTIONS } from '../utils';
+import type { RangeFilter } from '../utils';
 
 interface StatusHistoryChartProps {
   history: HistoryEntry[];
 }
-
-const LINES = [
-  { key: 'online', label: 'Online', color: '#3fb950' },
-  { key: 'inMeeting', label: 'In Meeting', color: '#d29922' },
-  { key: 'offline', label: 'Offline', color: '#f85149' },
-  { key: 'deactivated', label: 'Deactivated', color: '#6e7681' },
-] as const;
 
 interface TooltipPayloadItem {
   dataKey: string;
@@ -34,31 +29,6 @@ interface TooltipProps {
   payload?: TooltipPayloadItem[];
   label?: string;
 }
-
-type RangeFilter = 'daily' | 'monthly' | 'all';
-
-const RANGE_OPTIONS: { key: RangeFilter; label: string }[] = [
-  { key: 'daily', label: 'Daily' },
-  { key: 'monthly', label: 'Monthly' },
-  { key: 'all', label: 'All Time' },
-];
-
-const RANGE_META: Record<
-  RangeFilter,
-  { sliceCount: number | null; tickEvery: number; subtitle: string }
-> = {
-  daily: {
-    sliceCount: 30,
-    tickEvery: 5,
-    subtitle: 'Last 30 months · recent view',
-  },
-  monthly: { sliceCount: 12, tickEvery: 1, subtitle: 'Last 12 months' },
-  all: {
-    sliceCount: null,
-    tickEvery: 6,
-    subtitle: 'All time · Jan 2021 – Aug 2025',
-  },
-};
 
 const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (!active || !payload?.length) return null;

@@ -1,5 +1,5 @@
 import type { DeviceStatus } from '../types';
-import { STATUS_META } from '../hooks';
+import { STATUS_META } from '../utils';
 
 interface StatusBadgeProps {
   status: DeviceStatus;
